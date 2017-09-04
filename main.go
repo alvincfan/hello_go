@@ -29,8 +29,7 @@ func main() {
 	f := domain.NewFactory("myhome", 200, &defaultAddress)
 	g := domain.NewGroundTransportation(f, domain.Geolocation{
 		Latitude:  100,
-		Longitude: 300})
-	g.SerialNumber = "abcdef"
+		Longitude: 300}, "abcdef")
 	d := domain.NewDealership(uuid.NewV4().String(), "mydealer", &defaultAddress)
 
 	err := usecases.AddNewDealership(dealershipManager, d)

@@ -1,12 +1,12 @@
 package domain
 
 // NewGroundTransportation creates a new ground transportation
-func NewGroundTransportation(manufacture *Manufacture, location Geolocation) *GroundTransportation {
+func NewGroundTransportation(manufacture *Manufacture, location Geolocation, serialNumber string) *GroundTransportation {
 	ground := &GroundTransportation{
 		Location: location,
+		SerialNumber: serialNumber,
+		Manufacture: manufacture,
 	}
-	ground.Manufacture = manufacture
-
 	return ground
 }
 
