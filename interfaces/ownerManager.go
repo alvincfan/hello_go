@@ -11,4 +11,6 @@ type OwnerManager interface {
 	GetOwner(ownerID string) *domain.Owner
 	UpdateOwner(owner *domain.Owner) bool
 	DeleteOwner(owner *domain.Owner) bool
+
+	IsExisting(ownerID string) bool
 }

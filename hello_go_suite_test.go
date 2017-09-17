@@ -4,8 +4,8 @@ import (
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 
-	"testing"
 	"github.com/onsi/ginkgo/reporters"
+	"testing"
 )
 
 func TestHelloGo(t *testing.T) {
