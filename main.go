@@ -32,7 +32,7 @@ func main() {
 		Longitude: 300}, "abcdef")
 	d := domain.NewDealership(uuid.NewV4().String(), "mydealer", &defaultAddress)
 
-	err := usecases.AddNewDealership(dealershipManager, d)
+	err := dealershipManager.AddDealership(d)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -57,12 +57,6 @@ func main() {
 		return
 	}
 
-	ground, ID := usecases.CheckGroundTransportationInDealership(dealershipManager, g.SerialNumber)
-	if ground != nil {
-		fmt.Println("Serial Number %v still found in dealership %v inventory", g.SerialNumber, ID)
-		fmt.Println("These should be in UNIT TEST!")
-		return
-	}
 	owner.MailingAddress = "mymailingaddress"
 	d.MailingAddress = "1 infinity road"
 	f.MailingAddress = "china"
@@ -81,7 +75,7 @@ func main() {
 		g.SerialNumber, g.Owner.Name)
 	fmt.Printf("default address at main %v\n", defaultAddress)
 
-	err = usecases.AddGroundInventory(dealershipManager, d.DealershipID, g)
+	err = usecases.BuyGroundTransportationFromOwner(dealershipManager, ownerManager, d, g, owner)
 	if err != nil {
 		fmt.Println(err.Error())
 		return

@@ -93,3 +93,15 @@ func (m *MockOwnerManager) DeleteOwner(owner *domain.Owner) bool {
 func (mr *MockOwnerManagerMockRecorder) DeleteOwner(owner interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteOwner", reflect.TypeOf((*MockOwnerManager)(nil).DeleteOwner), owner)
 }
+
+// IsExisting mocks base method
+func (m *MockOwnerManager) IsExisting(ownerID string) bool {
+	ret := m.ctrl.Call(m, "IsExisting", ownerID)
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// IsExisting indicates an expected call of IsExisting
+func (mr *MockOwnerManagerMockRecorder) IsExisting(ownerID interface{}) *gomock.Call {
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IsExisting", reflect.TypeOf((*MockOwnerManager)(nil).IsExisting), ownerID)
+}

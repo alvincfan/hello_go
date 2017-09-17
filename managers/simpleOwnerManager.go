@@ -51,20 +51,28 @@ func (oM *SimpleOwnerManager) GetOwner(owerID string) *domain.Owner {
 
 // UpdateOwner update existing owner information
 func (oM *SimpleOwnerManager) UpdateOwner(owner *domain.Owner) bool {
-	found := oM.GetOwner(owner.OwnerID)
-	if found == nil {
-		return false
+	if oM.IsExisting(owner.OwnerID) {
+		oM.owners[owner.OwnerID] = owner
+		return true
 	}
-	oM.owners[owner.OwnerID] = owner
-	return true
+	return false
 }
 
 // DeleteOwner delete existing owner
 func (oM *SimpleOwnerManager) DeleteOwner(owner *domain.Owner) bool {
-	found := oM.GetOwner(owner.OwnerID)
+	if oM.IsExisting(owner.OwnerID) {
+		delete(oM.owners, owner.OwnerID)
+		return true
+	}
+	return false
+
+}
+
+// IsExisting owner is in the system
+func (oM *SimpleOwnerManager) IsExisting(ownerID string) bool {
+	found := oM.GetOwner(ownerID)
 	if found == nil {
 		return false
 	}
-	delete(oM.owners, found.OwnerID)
 	return true
 }

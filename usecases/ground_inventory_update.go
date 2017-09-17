@@ -16,27 +16,12 @@ func AddGroundInventory(dealershipMgr interfaces.DealershipManager, dealershipID
 	return dealershipMgr.AddGroundInventory(dealershipID, ground)
 }
 
-// AddNewDealership adds a dealership to dealership manager
-func AddNewDealership(dealershipMgr interfaces.DealershipManager, dealership *domain.Dealership) error {
-	return dealershipMgr.AddDealership(dealership)
-}
-
 // SoldGroundTransportation update dealership manager and owner manager when sold a ground transporatation to an owner
 func SoldGroundTransportation(dealershipMgr interfaces.DealershipManager, ownerMgr interfaces.OwnerManager, dealership *domain.Dealership, ground *domain.GroundTransportation, owner *domain.Owner) error {
 
 	owner.Transportation = append(owner.Transportation, ground.SerialNumber)
 
-	existingOwner := ownerMgr.GetOwner(owner.OwnerID)
-	if existingOwner == nil {
-		// owner not in owner manager system, add for future advertisement! ahaha
-		fmt.Println("add customer to owner system for advertisement!")
-		ownerMgr.CreateOwner(owner.OwnerID, owner.Name, &owner.Address)
-	} else {
-		// repeat customer!  we are doing something right for owner to comes back for more!
-		fmt.Println("Repeat customer!  we are doing something right!")
-	}
-
-	if !ownerMgr.UpdateOwner(owner) {
+	if !UpdateOwnerInOwnerManagement(ownerMgr, owner) {
 		return fmt.Errorf("Failed to update owner %v", owner)
 	}
 
@@ -68,4 +53,39 @@ func CheckGroundTransportationOwner(ownerMgr interfaces.OwnerManager, serialNumb
 		}
 	}
 	return nil
+}
+
+// UpdateOwnerInOwnerManagement finds out if owner is in the system
+func UpdateOwnerInOwnerManagement(ownerMgr interfaces.OwnerManager, owner *domain.Owner) bool {
+	if ownerMgr.IsExisting(owner.OwnerID) {
+		// repeat customer!  we are doing something right for owner to comes back for more!
+		fmt.Println("Repeat customer!  we are doing something right!")
+	} else {
+		// owner not in owner manager system, add for future advertisement! ahaha
+		fmt.Println("add customer to owner system for advertisement!")
+		ownerMgr.CreateOwner(owner.OwnerID, owner.Name, &owner.Address)
+	}
+
+	return ownerMgr.UpdateOwner(owner)
+}
+
+// BuyGroundTransportationFromOwner buys back ground transporatation
+func BuyGroundTransportationFromOwner(dealershipMgr interfaces.DealershipManager, ownerMgr interfaces.OwnerManager, dealership *domain.Dealership, ground *domain.GroundTransportation, owner *domain.Owner) error {
+	ground.Owner = nil
+	newTransportation := []string{}
+
+	// Update owner transportation
+	for _, t := range owner.Transportation {
+		if t == ground.SerialNumber {
+			continue
+		}
+		newTransportation = append(newTransportation, t)
+	}
+	owner.Transportation = newTransportation
+
+	if !UpdateOwnerInOwnerManagement(ownerMgr, owner) {
+		return fmt.Errorf("Failed to update owner %v", owner)
+	}
+
+	return dealershipMgr.AddGroundInventory(dealership.DealershipID, ground)
 }
