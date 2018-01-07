@@ -46,9 +46,9 @@ func main() {
 
 	prevOwner := usecases.CheckGroundTransportationOwner(ownerManager, g.SerialNumber)
 	if prevOwner != nil {
-		fmt.Println("Transporation Serial Number %v has previous owner %v", g.SerialNumber, prevOwner.Name)
+		fmt.Printf("Transporation Serial Number %v has previous owner %v\n", g.SerialNumber, prevOwner.Name)
 	} else {
-		fmt.Println("Transporation Serial Number %v has no previous owner recorded", g.SerialNumber)
+		fmt.Printf("Transporation Serial Number %v has no previous owner recorded\n", g.SerialNumber)
 	}
 
 	err = usecases.SoldGroundTransportation(dealershipManager, ownerManager, d, g, owner)

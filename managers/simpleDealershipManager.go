@@ -99,9 +99,9 @@ func (sD *SimpleDealershipManager) SoldGroundInventory(dealershipID string, seri
 	if error != nil {
 		return error
 	}
-	fmt.Println("Update ground inventory serial number %v owner to %v", found.SerialNumber, owner.Name)
+	fmt.Printf("Update ground inventory serial number %v owner to %v\n", found.SerialNumber, owner.Name)
 	found.Owner = owner
-	fmt.Println("Remove serial number %v from dealership %v inventory", serialNumber, dealershipID)
+	fmt.Printf("Remove serial number %v from dealership %v inventory\n", serialNumber, dealershipID)
 	delete(sD.GetDealership(dealershipID).GroundInventory, serialNumber)
 	return nil
 }

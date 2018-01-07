@@ -1,0 +1,64 @@
+@startuml
+
+class Address {
+	Zipcode        string
+	MailingAddress string
+}
+class GeoLocation {
+	Latitude  float32
+	Longitude float32
+}
+
+class Manufacture {
+	ManufactureID string
+	Name          string
+	YearInService int32
+}
+class Owner {
+	OwnerID        string
+	Name           string
+	Transportation []string
+}
+
+Address *-- GeoLocation
+
+class Dealership {
+	Name            string
+	DealershipID    string
+	GroundInventory map[string]*GroundTransportation
+}
+
+Dealership *-- Address
+Manufacture *-- Address
+Owner *-- Address
+
+class GroundTransportation {
+	Manufacture  *Manufacture
+	Owner        *Owner
+	Location     Geolocation
+	SerialNumber string
+}
+
+interface DealershipManager {
+	GetAllDealership() map[string]*domain.Dealership
+	AddDealership(dealership *domain.Dealership) error
+	GetDealership(dealershipID string) *domain.Dealership
+	RemoveDealership(dealershipID string) error
+
+	AddGroundInventory(dealershipID string, ground *domain.GroundTransportation) error
+	GetGroundInventory(dealershipID string, serialNumber string) (*domain.GroundTransportation, error)
+	MoveGroundInventory(dealershipID string, serialNumber string) error
+	SoldGroundInventory(dealershipID string, serialNumber string, owner *domain.Owner) error
+}
+
+interface OwnershipManager {
+	GetOwners() map[string]*domain.Owner
+	CreateOwner(ownerID string, name string, address *domain.Address) (*domain.Owner, error)
+	GetOwner(ownerID string) *domain.Owner
+	UpdateOwner(owner *domain.Owner) bool
+	DeleteOwner(owner *domain.Owner) bool
+
+	IsExisting(ownerID string) bool
+}
+
+@enduml
